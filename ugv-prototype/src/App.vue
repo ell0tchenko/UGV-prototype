@@ -5,3 +5,11 @@ import Map from "./components/Map.vue";
 <template>
   <Map />
 </template>
+
+<style>
+body,
+#app {
+  min-height: 100vh;
+  width: 100%;
+}
+</style>

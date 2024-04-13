@@ -6,6 +6,7 @@
         <div id="map" class="map"></div>
         <div class="button-instruction--container">
             <button class="engine-button" @click="toggleEngine">
+                <img :src="Icon" alt="power icon">
                 <span v-if="engineStarted">STOP ENGINE</span>
                 <span v-else>START ENGINE</span>
             </button>
@@ -26,27 +27,25 @@
             </div>
         </div>
     </div>
-
-
-
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, watchEffect, ref, onUnmounted } from 'vue';
 import * as leaflet from "leaflet";
 import { userMarker, nearbyMarkers, Marker } from "@/stores/mapStore";
+import powerIcon from "@/assets/power-button.svg"
 
 export default defineComponent({
     name: 'MapComponent',
     setup() {
-        const engineStarted = ref(false);
-        const isMounted = ref(false);
         let map: leaflet.Map;
         let userGeoMarker: leaflet.Marker;
         let waypointPopup: leaflet.Popup | null = null;
+        const Icon = powerIcon;
+        const engineStarted = ref(false);
+        const isMounted = ref(false);
         const notificationMessage = ref('');
         const notificationVisible = ref(false);
-
 
         onMounted(() => {
             isMounted.value = true;
@@ -62,14 +61,12 @@ export default defineComponent({
                 userGeoMarker.setLatLng([latitude, longitude]);
             } else {
                 userGeoMarker = leaflet.marker([latitude, longitude]);
-
                 if (map) {
                     userGeoMarker.addTo(map);
                 } else {
                     console.error("Map is not initialized yet.");
                     return;
                 }
-
                 userGeoMarker.bindPopup("User Marker");
 
                 const el = userGeoMarker.getElement();
@@ -286,7 +283,8 @@ export default defineComponent({
             renameWaypoint,
             driveWaypoint,
             notificationMessage,
-            notificationVisible
+            notificationVisible,
+            Icon
         };
     }
 });
@@ -367,10 +365,19 @@ export default defineComponent({
     border-radius: 4px;
     transition: background-color 0.3s;
     font-family: "Nunito Sans", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .engine-button:hover {
     background-color: rgba(133, 133, 133, 0.8);
+}
+
+.engine-button img {
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
 }
 
 .notification-popup {
